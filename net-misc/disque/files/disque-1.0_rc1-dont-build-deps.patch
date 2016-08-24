@@ -1,0 +1,51 @@
+diff --git a/src/Makefile b/src/Makefile
+index ffe529b..e4db6d3 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -49,7 +49,7 @@ endif
+ # Override default settings if possible
+ -include .make-settings
+ 
+-FINAL_CFLAGS=$(STD) $(WARN) $(OPT) $(DEBUG) $(CFLAGS) $(DISQUE_CFLAGS)
++FINAL_CFLAGS=$(STD) $(WARN) $(OPT) $(DEBUG) $(CFLAGS) $(DISQUE_CFLAGS) -I/usr/include -L/usr/lib
+ FINAL_LDFLAGS=$(LDFLAGS) $(DISQUE_LDFLAGS) $(DEBUG)
+ FINAL_LIBS=-lm
+ DEBUG=-g -ggdb
+@@ -76,7 +76,7 @@ endif
+ endif
+ endif
+ # Include paths to dependencies
+-FINAL_CFLAGS+= -I../deps/hiredis -I../deps/linenoise
++FINAL_CFLAGS+= -I/usr/include/hiredis -I/usr/include/linenoise
+ 
+ ifeq ($(MALLOC),tcmalloc)
+ 	FINAL_CFLAGS+= -DUSE_TCMALLOC
+@@ -90,8 +90,8 @@ endif
+ 
+ ifeq ($(MALLOC),jemalloc)
+ 	DEPENDENCY_TARGETS+= jemalloc
+-	FINAL_CFLAGS+= -DUSE_JEMALLOC -I../deps/jemalloc/include
+-	FINAL_LIBS+= ../deps/jemalloc/lib/libjemalloc.a -ldl
++	FINAL_CFLAGS+= -DUSE_JEMALLOC -I/usr/include/jemalloc
++	FINAL_LIBS+= -ljemalloc -ldl
+ endif
+ 
+ DISQUE_CC=$(QUIET_CC)$(CC) $(FINAL_CFLAGS)
+@@ -144,7 +144,7 @@ persist-settings: distclean
+ 	echo DISQUE_LDFLAGS=$(DISQUE_LDFLAGS) >> .make-settings
+ 	echo PREV_FINAL_CFLAGS=$(FINAL_CFLAGS) >> .make-settings
+ 	echo PREV_FINAL_LDFLAGS=$(FINAL_LDFLAGS) >> .make-settings
+-	-(cd ../deps && $(MAKE) $(DEPENDENCY_TARGETS))
++	# -(cd ../deps && $(MAKE) $(DEPENDENCY_TARGETS))
+ 
+ .PHONY: persist-settings
+ 
+@@ -167,7 +167,7 @@ $(DISQUE_SERVER_NAME): $(DISQUE_SERVER_OBJ)
+ 
+ # disque-cli
+ $(DISQUE_CLI_NAME): $(DISQUE_CLI_OBJ)
+-	$(DISQUE_LD) -o $@ $^ ../deps/hiredis/libhiredis.a ../deps/linenoise/linenoise.o $(FINAL_LIBS)
++	$(DISQUE_LD) -o $@ $^ -lhiredis -llinenoise $(FINAL_LIBS)
+ 
+ # disque-check-aof
+ $(DISQUE_CHECK_AOF_NAME): $(DISQUE_CHECK_AOF_OBJ)

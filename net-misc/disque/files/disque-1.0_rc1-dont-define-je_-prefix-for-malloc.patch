@@ -1,0 +1,33 @@
+diff --git a/src/zmalloc.c b/src/zmalloc.c
+index 4dbef83..bd1b4d7 100644
+--- a/src/zmalloc.c
++++ b/src/zmalloc.c
+@@ -62,10 +62,10 @@ void zlibc_free(void *ptr) {
+ #define realloc(ptr,size) tc_realloc(ptr,size)
+ #define free(ptr) tc_free(ptr)
+ #elif defined(USE_JEMALLOC)
+-#define malloc(size) je_malloc(size)
+-#define calloc(count,size) je_calloc(count,size)
+-#define realloc(ptr,size) je_realloc(ptr,size)
+-#define free(ptr) je_free(ptr)
++// #define malloc(size) je_malloc(size)
++// #define calloc(count,size) je_calloc(count,size)
++// #define realloc(ptr,size) je_realloc(ptr,size)
++// #define free(ptr) je_free(ptr)
+ #endif
+ 
+ #define update_zmalloc_stat_alloc(__n) do { \
+diff --git a/src/zmalloc.h b/src/zmalloc.h
+index b6e9d5e..3fabbad 100644
+--- a/src/zmalloc.h
++++ b/src/zmalloc.h
+@@ -50,7 +50,8 @@
+ #include <jemalloc/jemalloc.h>
+ #if (JEMALLOC_VERSION_MAJOR == 2 && JEMALLOC_VERSION_MINOR >= 1) || (JEMALLOC_VERSION_MAJOR > 2)
+ #define HAVE_MALLOC_SIZE 1
+-#define zmalloc_size(p) je_malloc_usable_size(p)
++// #define zmalloc_size(p) je_malloc_usable_size(p)
++#define zmalloc_size(p) malloc_usable_size(p)
+ #else
+ #error "Newer version of jemalloc required"
+ #endif
