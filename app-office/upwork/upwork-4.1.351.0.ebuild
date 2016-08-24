@@ -1,27 +1,32 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=5
 
-inherit rpm eutils
+inherit rpm eutils pax-utils versionator
 
 # Binary only distribution
 QA_PREBUILT="*"
 
+MY_PV=$(replace_all_version_separators '_')
+KEY="a7qf2qa9wn508n52"
+
 DESCRIPTION="Project collaboration and tracking software for upwork.com"
 HOMEPAGE="https://www.upwork.com/"
-SRC_URI="amd64? ( http://updates.team.odesk.com/binaries/v4_0_109_0_5dd4be27f24afbda38b590/${PN}_x86_64.rpm -> ${P}_x86_64.rpm )
-		 x86? ( http://updates.team.odesk.com/binaries/v4_0_109_0_5dd4be27f24afbda38b590/${PN}_i386.rpm -> ${P}_i386.rpm )
+SRC_URI="
+	amd64? ( https://updates-desktopapp.upwork.com/binaries/v${MY_PV}_${KEY}/upwork_x86_64.rpm -> ${P}_x86_64.rpm )
+	x86?   ( https://updates-desktopapp.upwork.com/binaries/v${MY_PV}_${KEY}/upwork_i386.rpm   -> ${P}_i386.rpm )
 "
 LICENSE="ODESK"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64" # ~x86"
 
 S=${WORKDIR}
 
 RDEPEND="
 	dev-libs/libgcrypt:11
+	gnome-base/gconf
 	media-libs/alsa-lib
 	sys-libs/libcap
 	virtual/udev
@@ -38,6 +43,7 @@ src_install() {
 	dobin usr/bin/upwork
 
 	insinto /usr/share
+	pax-mark m usr/share/upwork/upwork
 	doins -r usr/share/upwork
 	dosym /usr/lib/libudev.so /usr/share/upwork/libudev.so.0
 
