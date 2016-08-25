@@ -33,7 +33,7 @@ src_compile(){
     cd FreeFileSync/Source
     sed -i 's/-lboost_system/-lboost_system -lrt/' Makefile
     emake launchpad || die "emake failed for FreeFileSync"
-    cd RealtimeSync
+    cd RealTimeSync
     sed -i 's/-lboost_system/-lboost_system -lrt/' Makefile
     emake launchpad || die "emake failed for RealtimeSync"
 }
@@ -41,14 +41,14 @@ src_compile(){
 src_install(){
     cd FreeFileSync/Source
     emake DESTDIR="${D}" install || die "Install failed for FreeFileSync"
-    cd RealtimeSync
+    cd RealTimeSync
     emake DESTDIR="${D}" install || die "Install failed for RealtimeSync"
 
-    unzip ../../Build/Resources.zip FreeFileSync.png RealtimeSync.png
+    unzip ../../Build/Resources.zip FreeFileSync.png RealTimeSync.png
 
     newicon FreeFileSync.png FreeFileSync.png
     make_desktop_entry "FreeFileSync" "Synchronize files and folders" "FreeFileSync" "System;Utility"
 
-    newicon RealtimeSync.png RealtimeSync.png
-    make_desktop_entry "RealtimeSync" "Synchronize files and folders in realtime" "RealtimeSync" "System;Utility"
+    newicon RealTimeSync.png RealTimeSync.png
+    make_desktop_entry "RealTimeSync" "Synchronize files and folders in realtime" "RealTimeSync" "System;Utility"
 }
