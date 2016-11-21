@@ -10,7 +10,7 @@ inherit rpm eutils pax-utils versionator
 QA_PREBUILT="*"
 
 MY_PV=$(replace_all_version_separators '_')
-KEY="a7qf2qa9wn508n52"
+KEY="zjqu5h1eh5fvxz5t"
 
 DESCRIPTION="Project collaboration and tracking software for upwork.com"
 HOMEPAGE="https://www.upwork.com/"
